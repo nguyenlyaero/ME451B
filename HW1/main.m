@@ -1,5 +1,5 @@
 sigma=10; w=8/3; tau=0.4;
-s=0;
+s=10;
 syms r A B C D E
 SteadyEqn=[-A + r*B - s*D==0;
            -B + A*(1-C)==0;
@@ -7,7 +7,8 @@ SteadyEqn=[-A + r*B - s*D==0;
            -tau*D + A*(1-E)==0;
            -tau*E + A*D==0];
 
-rs=[linspace(1e-10, 1, 20)'; linspace(1,1.245,50)'; linspace(1.245,1.255,100)'; linspace(1.255,1.5,50)'; linspace(1.5, 3, 50)'];
+%rs=[linspace(1e-10, 1, 20)'; linspace(1,1.245,50)'; linspace(1.245,1.255,100)'; linspace(1.255,1.5,50)'; linspace(1.5, 3, 50)'];
+rs=[linspace(1e-10, 8.45, 48)'; linspace(8.45,8.6,10)'; linspace(8.6, 8.85, 20)'; linspace(8.85, 50, 192)'];
 % Steady-States
 
 SteadySol=solve(SteadyEqn, A, B, C, D, E);
@@ -75,28 +76,28 @@ hold off;
 range=find(SteadyAs(:,2)~=0);
 i1=range(1); i2=range(end)+1;
 
-rsFiltered={rs; rs(i1:i2); rs(i1:i2); [rs(i1); rs(i2:end)]; [rs(i1);rs(i2:end)]};
+rsFiltered={rs; rs(i1:i2); rs(i1:i2); [rs(i1); rs(i1+1:end)]; [rs(i1);rs(i1+1:end)]};
 SteadyAsFiltered={SteadyAs(:,1); SteadyAs(i1:i2,2);...
-    SteadyAs(i1:i2,3); [SteadyAs(i1,2); SteadyAs(i2:end,4)]; [SteadyAs(i1,3); SteadyAs(i2:end,5)]};
+    SteadyAs(i1:i2,3); [SteadyAs(i1,2); SteadyAs(i1+1:end,4)]; [SteadyAs(i1,3); SteadyAs(i1+1:end,5)]};
 SteadyBsFiltered={SteadyBs(:,1); SteadyBs(i1:i2,2);...
-    SteadyBs(i1:i2,3); [SteadyBs(i1,2); SteadyBs(i2:end,4)]; [SteadyBs(i1,3); SteadyBs(i2:end,5)]};
+    SteadyBs(i1:i2,3); [SteadyBs(i1,2); SteadyBs(i1+1:end,4)]; [SteadyBs(i1,3); SteadyBs(i1+1:end,5)]};
 SteadyCsFiltered={SteadyCs(:,1); SteadyCs(i1:i2,2);...
-    SteadyCs(i1:i2,3); [SteadyCs(i1,2); SteadyCs(i2:end,4)]; [SteadyCs(i1,3); SteadyCs(i2:end,5)]};
+    SteadyCs(i1:i2,3); [SteadyCs(i1,2); SteadyCs(i1+1:end,4)]; [SteadyCs(i1,3); SteadyCs(i1+1:end,5)]};
 SteadyDsFiltered={SteadyDs(:,1); SteadyDs(i1:i2,2);...
-    SteadyDs(i1:i2,3); [SteadyDs(i1,2); SteadyDs(i2:end,4)]; [SteadyDs(i1,3); SteadyDs(i2:end,5)]};
+    SteadyDs(i1:i2,3); [SteadyDs(i1,2); SteadyDs(i1+1:end,4)]; [SteadyDs(i1,3); SteadyDs(i1+1:end,5)]};
 SteadyEsFiltered={SteadyEs(:,1); SteadyEs(i1:i2,2);...
-    SteadyEs(i1:i2,3); [SteadyEs(i1,2); SteadyEs(i2:end,4)]; [SteadyEs(i1,3); SteadyEs(i2:end,5)]};
+    SteadyEs(i1:i2,3); [SteadyEs(i1,2); SteadyEs(i1+1:end,4)]; [SteadyEs(i1,3); SteadyEs(i1+1:end,5)]};
 % Plot Steady States
 figure;
 hold on;
 for i=1:5
-plot(cell2mat(rsFiltered(i)), cell2mat(SteadyCsFiltered(i)));
+plot(cell2mat(rsFiltered(i)), cell2mat(SteadyAsFiltered(i)));
 end
 hold off;
 
 % Plot eigenvalues
 JeigFiltered={Jeig(:,:,1); Jeig(i1:i2,:,2); Jeig(i1:i2,:,3); ...
-    [Jeig(i1,:,2); Jeig(i2:end,:,4)]; [Jeig(i1,:,3); Jeig(i2:end,:,4)]};
+    [Jeig(i1,:,2); Jeig(i1+1:end,:,4)]; [Jeig(i1,:,3); Jeig(i1+1:end,:,4)]};
 
 figure;
 hold on;
