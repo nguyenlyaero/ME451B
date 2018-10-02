@@ -36,11 +36,11 @@ SteadyDs=AllRealFilter.*SteadyDs;
 SteadyEs=AllRealFilter.*SteadyEs;
 
 % Stability
-J=[ -1 r 0 -s 0;
+J=[ -sigma sigma*r 0 -s*sigma 0;
     1-C -1 -A 0 0;
-    B A -1 0 0;
+    w*B w*A -w 0 0;
     1-E 0 0 -tau -A;
-    D 0 0 A -tau ];
+    w*D 0 0 w*A -w*tau ];
 Jeig=zeros(270,5,nsol); % r,eig,sol
 
 for i=1:nsol
@@ -105,3 +105,17 @@ for i=1:nsol
 plot(cell2mat(rsFiltered(i)), max(real(cell2mat(JeigFiltered(i))).'));
 end
 hold off;
+
+%%
+s=linspace(10,200,20);
+rmin=zeros(20,1);
+rsol=zeros(20,1);
+for i=1:20
+    si=s(i);
+    rmin(i)=((si+tau)*sigma-tau)/(tau+1);
+    rsol(i)=max(roots([-(tau+1) (si*sigma+tau*sigma-(tau+1)*(1-sigma+tau)) ((1-sigma+tau)*(si*sigma+tau*sigma-tau)-si*sigma)]));
+end
+
+figure;
+hold on;
+plot(s, rsol-rmin);
